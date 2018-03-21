@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# $Id: analyze_ir1.py,v 1.4 2018/03/21 13:48:36 pi Exp pi $
+# $Id: analyze_ir1.py,v 1.4 2018/03/21 13:48:36 pi Exp $
 # -*- coding: utf-8 -*-
 # 日本語
 

@@ -1,0 +1,179 @@
+head	1.2;
+access;
+symbols;
+locks
+	pi:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2018.03.21.10.36.13;	author pi;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2018.03.21.08.09.01;	author pi;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@#!/usr/bin/env python3
+# $Id: analyze_ir1.py,v 1.1 2018/03/21 08:09:01 pi Exp pi $
+# -*- coding: utf-8 -*-
+# 日本語
+
+import sys
+import os
+
+def main():
+    if len(sys.argv) != 2:
+        print('usage: {0} filename'.format(os.path.basename(sys.argv[0])))
+        exit(1)
+
+    filename = sys.argv[1]
+    f = open(filename, "r")
+
+    line = f.readline()
+    while not 'space ' in line:
+        line = f.readline()
+    print(line)
+
+    vlist = []
+    vptnlist = []
+    for line in f:
+        [key, value] = line.split()
+        value = int(value)
+        if value > 10000:
+            value = 10000
+
+        vptnlist.append(value)
+        if key == 'pulse':
+            a = [value]
+        else:
+            a.append(value)
+            vlist.append(a)
+
+    f.close()
+
+    if key == 'pulse':
+        vptnlist.append(999999)
+        a.append(999999)
+        vlist.append(a)
+
+    print('vlist =', vlist)
+
+    vptnlist = list(set(vptnlist))
+    print('vptnlist =', vptnlist)
+
+    v_min = min(vptnlist)
+    print('v_min =', v_min)
+
+    sum = 0
+    count = 0
+    for [v1, v2] in vlist:
+        if v1/v_min < 1.1:
+            sum += v1
+            count += 1
+        if v2/v_min < 1.1:
+            sum += v2
+            count += 1
+    v_min2 = int(sum / count)
+    print('v_min2 =', v_min2)
+
+    vlist2 = []
+    for [v1, v2] in vlist:
+        v1 = round(v1/v_min2)
+        v2 = round(v2/v_min2)
+        vlist2.append([v1, v2])
+    print('vlist2 =', vlist2)
+
+    plist = []
+    for v in vlist2:
+        key = str(v)
+        flag1 = False
+        for k in plist:
+            if k == key:
+                flag1 = True
+        if not flag1:
+            plist.append(key)
+    print('plist = ', plist)
+
+    sym_str = '-01/ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    bit_count = 0
+    for v in vlist2:
+        key = str(v)
+        idx = plist.index(key)
+        ch = sym_str[idx]
+        print(ch, end='')
+        if ch == '0' or ch == '1':
+            bit_count += 1
+            if bit_count == 8:
+                print(' ', end='')
+                bit_count = 0
+        else:
+            bit_count = 0
+
+        if ch == '/':
+            print()
+
+    print()
+
+
+if __name__ == '__main__':
+    main()
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d2 1
+a2 1
+# $Id:$
+d20 1
+a20 1
+    #print(line)
+d23 1
+a23 1
+    v_min = 9999999
+a24 1
+        #print(line.strip())
+a25 2
+#        marume=1
+#        value = round(int(value)/marume)*marume
+d27 4
+a30 2
+        if value < v_min:
+            v_min = value
+d37 2
+d40 1
+d44 4
+a47 1
+    f.close()
+d49 1
+a49 1
+    print('vlist =', vlist)
+d66 2
+a67 2
+        v1 = round(v1/v_min2,1)
+        v2 = round(v2/v_min2,1)
+a70 1
+
+d82 2
+a83 1
+    sym_str = '-01ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+d87 13
+a99 1
+        print(sym_str[idx], end='')
+@

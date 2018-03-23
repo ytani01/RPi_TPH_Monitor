@@ -121,34 +121,11 @@ def main():
     print('sym_str = \'' + sym_str + '\'')
 
     print()
-#    bit_ptn = ''
     sig_str = ''
     for v in sig_list_round:
         idx = sig_ptn_list.index(v)
         ch = sym_str[idx]
-
-#        if len(bit_ptn) > 0 and (not ch in '01'):
-#            print(':{0:1X}/{1:1X} '.format(int(bit_ptn, 2), int(bit_ptn[::-1], 2)), end='')
-#            bit_ptn = ''
-
-#        print(ch, end='')
         sig_str += ch
-
-#        if ch in '01':
-#            bit_ptn += ch
-#            if len(bit_ptn) == 4:
-#                print(':{0:1X}/{1:1X} '.format(int(bit_ptn, 2), int(bit_ptn[::-1], 2)), end='')
-#                bit_ptn = ''
-#        else:
-#            bit_ptn = ''
-
-#        if ch == '/':
-#            print()
-
-#    if bit_ptn != '':
-#        print(':{0:1X}/{1:1X} '.format(int(bit_ptn, 2), int(bit_ptn[::-1], 2)), end='')
-#        print('bit_ptn = \'' + bit_ptn + '\'')
-
     print('sig_str = \''+sig_str+'\'')
     print()
 

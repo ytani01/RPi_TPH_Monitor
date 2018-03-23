@@ -121,26 +121,26 @@ def main():
     print('sym_str = \'' + sym_str + '\'')
 
     print()
-    bit_ptn = ''
+#    bit_ptn = ''
     sig_str = ''
     for v in sig_list_round:
         idx = sig_ptn_list.index(v)
         ch = sym_str[idx]
 
-        if len(bit_ptn) > 0 and (not ch in '01'):
+#        if len(bit_ptn) > 0 and (not ch in '01'):
 #            print(':{0:1X}/{1:1X} '.format(int(bit_ptn, 2), int(bit_ptn[::-1], 2)), end='')
-            bit_ptn = ''
+#            bit_ptn = ''
 
 #        print(ch, end='')
         sig_str += ch
 
-        if ch in '01':
-            bit_ptn += ch
-            if len(bit_ptn) == 4:
+#        if ch in '01':
+#            bit_ptn += ch
+#            if len(bit_ptn) == 4:
 #                print(':{0:1X}/{1:1X} '.format(int(bit_ptn, 2), int(bit_ptn[::-1], 2)), end='')
-                bit_ptn = ''
-        else:
-            bit_ptn = ''
+#                bit_ptn = ''
+#        else:
+#            bit_ptn = ''
 
 #        if ch == '/':
 #            print()
@@ -152,54 +152,54 @@ def main():
     print('sig_str = \''+sig_str+'\'')
     print()
 
-    sig_str2 = '2:'
+    sig_str1 = '2:'
     bit_ptn = ''
     for ch in sig_str:
         if len(bit_ptn) == 4:
-            sig_str2 += ' '
+            sig_str1 += ' '
             bit_ptn = ''
-        sig_str2 += ch
+        sig_str1 += ch
         if ch in '01':
             bit_ptn += ch
         if ch == '/':
-            sig_str2 += '\n2:'
+            sig_str1 += '\n2:'
             bit_ptn = ''
-    print('sig_str2 =')
-    print(sig_str2)
+    print('sig_str1 =')
+    print(sig_str1)
 
-    sig_str3 = '3:'
+    sig_str2 = '3:'
     bit_ptn = ''
     for ch in sig_str:
         if ((not ch in '01') and len(bit_ptn) > 0) or ((ch in '01') and len(bit_ptn) == 4):
-            sig_str3 += '{0:1X}'.format(int(bit_ptn, 2))
+            sig_str2 += '{0:1X}'.format(int(bit_ptn, 2))
+            bit_ptn = ''
+        if ch in '01':
+            bit_ptn += ch
+        else:
+            sig_str2 += ch
+        if ch == '/':
+            sig_str2 += '\n3:'
+    if bit_ptn != '':
+        sig_str2 += '{0:1X}'.format(int(bit_ptn, 2))
+    print('sig_str2 =')
+    print(sig_str2)
+
+    sig_str3 = '4:'
+    bit_ptn = ''
+    for ch in sig_str:
+        if ((not ch in '01') and len(bit_ptn) > 0) or ((ch in '01') and len(bit_ptn) == 4):
+            sig_str3 += '{0:1X}'.format(int(bit_ptn[::-1], 2))
             bit_ptn = ''
         if ch in '01':
             bit_ptn += ch
         else:
             sig_str3 += ch
         if ch == '/':
-            sig_str3 += '\n3:'
+            sig_str3 += '\n4:'
     if bit_ptn != '':
         sig_str3 += '{0:1X}'.format(int(bit_ptn, 2))
     print('sig_str3 =')
     print(sig_str3)
-
-    sig_str4 = '4:'
-    bit_ptn = ''
-    for ch in sig_str:
-        if ((not ch in '01') and len(bit_ptn) > 0) or ((ch in '01') and len(bit_ptn) == 4):
-            sig_str4 += '{0:1X}'.format(int(bit_ptn[::-1], 2))
-            bit_ptn = ''
-        if ch in '01':
-            bit_ptn += ch
-        else:
-            sig_str4 += ch
-        if ch == '/':
-            sig_str4 += '\n4:'
-    if bit_ptn != '':
-        sig_str4 += '{0:1X}'.format(int(bit_ptn, 2))
-    print('sig_str4 =')
-    print(sig_str4)
 
     print()
     print('sig_list_raw =')

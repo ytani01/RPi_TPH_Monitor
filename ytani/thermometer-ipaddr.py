@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-# $Id: thermometer-ipaddr.py,v 1.1 2018/03/24 08:31:20 pi Exp pi $
+# $Id: thermometer-ipaddr.py,v 1.2 2018/03/24 15:04:26 pi Exp pi $
 #
 # -*- coding: utf-8 -*-
 #
+
 from time import sleep
 from BME280I2C import BME280I2C 
 from AQM0802A import AQM0802A
@@ -43,8 +44,13 @@ def main():
 
         i = (i + 1) % 2
         sleep(2)
+
+        # print IP address
+        ipaddr = getipaddr().split('.')
         lcd.clear()
-        lcd.print(getipaddr())
+        lcd.print(ipaddr[0]+'.'+ipaddr[1]+'.')
+        lcd.sec_line()
+        lcd.print(ipaddr[2]+'.'+ipaddr[3])
         sleep(2)
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 #!/usr/bin/python3 -u
-# $Id: thermometer-ipaddr-time.py,v 1.4 2018/03/26 02:22:27 pi Exp pi $
+# $Id: thermometer-ipaddr-time.py,v 1.5 2018/03/26 15:35:41 pi Exp pi $
 #
 # -*- coding: utf-8 -*-
 #
@@ -45,7 +45,7 @@ def main():
         if bme280ch.meas():
             prev_t = t
             prev_h = h
-            t = '{0:4.1f} C'.format(bme280ch.T)
+            t = '{0:4.1f}{1:c}C'.format(bme280ch.T,0xdf)
             h = '{0:4.1f} %'.format(bme280ch.H)
     
             lcd.clear()

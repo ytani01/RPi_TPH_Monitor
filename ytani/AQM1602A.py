@@ -95,7 +95,7 @@ def main():
         ch += 1
         if ch > 0xff:
             ch = 0x0f
-        time.sleep(0.3)
+        time.sleep(0.2)
 
 if __name__ == '__main__':
     main()

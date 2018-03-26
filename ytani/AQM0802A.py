@@ -23,7 +23,7 @@ class AQM0802A:
         except IOError:
             return False
 
-        time.sleep(50/1000000)
+        time.sleep(100/1000000)
 
         return True
 
@@ -88,12 +88,14 @@ def main():
     lcd.print('Success')
     time.sleep(1)
 
-    i=0
+    lcd.clear()
+    ch = 0x0f
     while True:
-        lcd.print(str(i)+' ')
-        #lcd.print('12345678')
-        i += 1
-        time.sleep(1)
+        lcd.print(chr(ch))
+        ch += 1
+        if ch > 0xff:
+            ch = 0x0f
+        time.sleep(0.1)
 
 if __name__ == '__main__':
     main()

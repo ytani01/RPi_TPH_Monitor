@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-
-"""
-LCD AQM1602A-RN-GBW Control Module via I2C
- 2017/10/22
-"""
+#
+# -*- coding: utf-8 -*-
+# 日本語
 
 import smbus
-import time
+from time import sleep
+import subprocess
+from datetime import datetime
 
 class AQM1602A:
     def __init__(self):
@@ -23,7 +23,7 @@ class AQM1602A:
         except IOError:
             return False
 
-        time.sleep(100/1000000)
+        sleep(100/1000000)
 
         return True
 
@@ -35,7 +35,7 @@ class AQM1602A:
         self.write_address_onebyte(0, 0x73)
         self.write_address_onebyte(0, 0x56)
         self.write_address_onebyte(0, 0x6C)
-        time.sleep(0.25)
+        sleep(0.25)
         self.write_address_onebyte(0, 0x38)
         self.write_address_onebyte(0, 0x0C)
         self.clear();
@@ -58,44 +58,55 @@ class AQM1602A:
         self.count = 0
         self.line = 1
         self.write_address_onebyte(0, 0x1)
-        time.sleep(0.002)
+        sleep(0.002)
 
     # Return to home without deleting characters
     def home(self):
         self.count = 0
         self.line = 1
         self.write_address_onebyte(0, 0x2)
-        time.sleep(0.002)
+        sleep(0.002)
 
     # Go to second line
     def sec_line(self):
         self.count = 0
         self.line = 2
         self.write_address_onebyte(0, 0xC0)
+        sleep(0.001)
 
+
+def getipaddr():
+    proc = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
+    ret = proc.communicate()[0].decode('utf-8').strip()
+    if ret != '':
+        return ret.split()[0]
+    else:
+        return ''
 
 def main():
     lcd = AQM1602A()
     lcd.init_lcd()
 
-    lcd.print('AQM1602')
-    time.sleep(1)
-    lcd.clear()
-    time.sleep(1)
-    lcd.print('Test')
-    time.sleep(1)
-    lcd.sec_line()
-    lcd.print('Success')
-    time.sleep(1)
-
-    lcd.clear()
-    ch = 0x0f
     while True:
-        lcd.print(chr(ch))
-        ch += 1
-        if ch > 0xff:
-            ch = 0x0f
-        time.sleep(0.1)
+        lcd.clear()
+
+        # date & time
+        t = datetime.now()
+        str = t.strftime('%m/%d')
+        wday_str = t.strftime('(%a)')
+        str += wday_str
+        sec = int(t.strftime('%S'))
+        if sec % 2 == 0:
+            str += t.strftime(' %H:%M')
+        else:
+            str += t.strftime(' %H %M')
+        lcd.print(str)
+
+        # IP address
+        lcd.sec_line()
+        lcd.print(getipaddr()[:16])
+
+        sleep(.5)
 
 if __name__ == '__main__':
     main()

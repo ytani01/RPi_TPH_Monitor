@@ -7,7 +7,7 @@ import smbus
 from time import sleep
 import subprocess
 from datetime import datetime
-from AQM1602A import AQM1602A
+from AQM0802A import AQM0802A
 
 def getipaddr():
     proc = subprocess.Popen(['hostname', '-I'], stdout=subprocess.PIPE)
@@ -18,7 +18,7 @@ def getipaddr():
         return ''
 
 def main():
-    lcd = AQM1602A()
+    lcd = AQM0802A()
     lcd.init_lcd()
 
     while True:
@@ -26,21 +26,27 @@ def main():
 
         # date & time
         t = datetime.now()
-        str = t.strftime('%m/%d')
-        wday_str = t.strftime('(%a)')
-        str += wday_str
-        sec = int(t.strftime('%S'))
-        if sec % 2 == 0:
-            str += t.strftime(' %H:%M')
-        else:
-            str += t.strftime(' %H %M')
+        str = t.strftime('%m/%d ')
+        str += t.strftime('%a')[:2]
         lcd.print(str)
+        lcd.sec_line()
+        lcd.print(t.strftime('%H:%M'))
+
+        sleep(3)
 
         # IP address
-        lcd.sec_line()
-        lcd.print(getipaddr()[:16])
+        ipaddr = getipaddr().split('.')
+        lcd.clear()
+        if len(ipaddr) == 4:
+            lcd.print(ipaddr[0]+'.'+ipaddr[1]+'.')
+            lcd.sec_line()
+            lcd.print(ipaddr[2]+'.'+ipaddr[3])
+        else:
+            lcd.print('no IP')
+            lcd.sec_line()
+            lcd.print(' address')
 
-        sleep(.5)
+        sleep(3)
 
 if __name__ == '__main__':
     main()

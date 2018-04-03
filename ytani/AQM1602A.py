@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
-
-"""
-LCD AQM1602A-RN-GBW Control Module via I2C
- 2017/10/22
-"""
+# -*- coding: utf-8 -*-
+# 日本語
 
 import smbus
-import time
+from time import sleep
 
 class AQM1602A:
     def __init__(self):
@@ -23,7 +20,7 @@ class AQM1602A:
         except IOError:
             return False
 
-        time.sleep(100/1000000)
+        sleep(100/1000000)
 
         return True
 
@@ -35,7 +32,7 @@ class AQM1602A:
         self.write_address_onebyte(0, 0x73)
         self.write_address_onebyte(0, 0x56)
         self.write_address_onebyte(0, 0x6C)
-        time.sleep(0.25)
+        sleep(0.25)
         self.write_address_onebyte(0, 0x38)
         self.write_address_onebyte(0, 0x0C)
         self.clear();
@@ -58,14 +55,14 @@ class AQM1602A:
         self.count = 0
         self.line = 1
         self.write_address_onebyte(0, 0x1)
-        time.sleep(0.002)
+        sleep(0.002)
 
     # Return to home without deleting characters
     def home(self):
         self.count = 0
         self.line = 1
         self.write_address_onebyte(0, 0x2)
-        time.sleep(0.002)
+        sleep(0.002)
 
     # Go to second line
     def sec_line(self):
@@ -74,19 +71,62 @@ class AQM1602A:
         self.write_address_onebyte(0, 0xC0)
 
 
+class EightCharsColumns:
+    def __init__(self):
+        self.lcd = AQM1602A()
+
+    def init_lines(self):
+        self.line1 = '----------------'
+        self.line2 = '----------------'
+
+    def clear(self):
+        self.lcd.clear()
+        self.init_lines()
+
+    def init(self):
+        self.lcd.init_lcd()
+        self.clear()
+
+    def print(self, l1, l2):
+        l1 = (l1[:7] + '        ')[:8]
+        l2 = (l2[:7] + '        ')[:8]
+
+        self.line1 = self.line1[8:] + l1
+        self.line2 = self.line2[8:] + l2
+        print(self.line1 + '.')
+        print(self.line2 + '.')
+
+        self.lcd.clear()
+        self.lcd.print(self.line1)
+        self.lcd.sec_line()
+        self.lcd.print(self.line2)
+
+
 def main():
+    ecc = EightCharsColumns()
+    ecc.init()
+
+    ecc.print('abc', '123')
+    sleep(3)
+    ecc.print('def', '456')
+    sleep(3)
+    ecc.print('ghi', '789')
+    sleep(3)
+    ecc.print('jkl', '012')
+    
+'''
     lcd = AQM1602A()
     lcd.init_lcd()
 
     lcd.print('AQM1602')
-    time.sleep(1)
+    sleep(1)
     lcd.clear()
-    time.sleep(1)
+    sleep(1)
     lcd.print('Test')
-    time.sleep(1)
+    sleep(1)
     lcd.sec_line()
     lcd.print('Success')
-    time.sleep(1)
+    sleep(1)
 
     lcd.clear()
     ch = 0x0f
@@ -95,7 +135,8 @@ def main():
         ch += 1
         if ch > 0xff:
             ch = 0x0f
-        time.sleep(0.1)
+        sleep(0.1)
+'''
 
 if __name__ == '__main__':
     main()

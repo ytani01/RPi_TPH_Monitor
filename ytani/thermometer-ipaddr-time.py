@@ -1,12 +1,13 @@
 #!/usr/bin/python3 -u
-# $Id: thermometer-ipaddr-time.py,v 1.1 2018/03/26 16:38:13 pi Exp pi $
+# $Id: thermometer-ipaddr-time.py,v 1.6 2018/04/03 16:44:13 pi Exp pi $
 #
 # -*- coding: utf-8 -*-
 #
 
 from time import sleep
 from BME280I2C import BME280I2C 
-from AQM0802A import AQM0802A
+from AQM1602A import AQM1602A
+from AQM1602A import EightCharsColumns
 import subprocess
 from datetime import datetime
 
@@ -23,44 +24,38 @@ def main():
     global lcd
 
     bme280ch = BME280I2C(0x76)
-    lcd = AQM0802A()
-    lcd.init_lcd()
+    ecc = EightCharsColumns()
+    ecc.init()
 
-    while bme280ch.meas():
+    while True:
         # date & time
         t = datetime.now()
-        line1 = t.strftime('%m/%d %a')[:8]
+        line1 = t.strftime('%m/%d%a')[:7]
         line2 = t.strftime('%H:%M')
 
-        lcd.clear()
-        lcd.print(line1)
-        lcd.sec_line()
-        lcd.print(line2)
+        ecc.print(line1, line2)
 
         print(t.strftime('%Y-%m-%d(%a) %H:%M:%S'))
         sleep(3)
 
         # Temperature
         if bme280ch.meas():
-            t = '{0:4.1f}{1:c}C'.format(bme280ch.T,0xdf)
-            h = '{0:4.1f} %'.format(bme280ch.H)
+            t_value = bme280ch.T
+            h_value = bme280ch.H
+
+            t = '{0:4.1f}{1:c}C'.format(t_value, 0xdf)
+            h = '{0:4.1f} %'.format(h_value)
     
-            lcd.clear()
-            lcd.print(t)
-            lcd.sec_line()
-            lcd.print(h)
+            ecc.print(t, h)
     
-            t = '{0:4.1f} C'.format(bme280ch.T)
+            t = '{0:4.1f} C'.format(t_value)
             print('{}, {}'.format(t,h))
             sleep(3)
 
         # IP address
         ipaddr = getipaddr().split('.')
         if len(ipaddr) == 4:
-            lcd.clear()
-            lcd.print(ipaddr[0]+'.'+ipaddr[1]+'.')
-            lcd.sec_line()
-            lcd.print('{:>8}'.format(ipaddr[2]+'.'+ipaddr[3]))
+            ecc.print(ipaddr[0]+'.'+ipaddr[1]+'.', ipaddr[2]+'.'+ipaddr[3])
 
             print('IP address = {0}'.format('.'.join(ipaddr)))
             sleep(3)

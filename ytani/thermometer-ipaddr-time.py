@@ -1,5 +1,5 @@
 #!/usr/bin/python3 -u
-# $Id: thermometer-ipaddr-time.py,v 1.6 2018/04/03 16:44:13 pi Exp pi $
+# $Id: thermometer-ipaddr-time.py,v 1.7 2018/04/03 16:54:52 pi Exp $
 #
 # -*- coding: utf-8 -*-
 #

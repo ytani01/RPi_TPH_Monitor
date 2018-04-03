@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# $Id: thermometer1.py,v 1.1 2018/03/26 16:38:13 pi Exp pi $
+# $Id: thermometer1.py,v 1.1 2018/04/03 16:54:52 pi Exp $
 #
 # -*- coding: utf-8 -*-
 #

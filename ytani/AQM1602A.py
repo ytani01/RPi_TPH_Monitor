@@ -88,18 +88,32 @@ class EightCharsColumns:
         self.clear()
 
     def print(self, l1, l2):
+
         l1 = (l1[:7] + '        ')[:8]
         l2 = (l2[:7] + '        ')[:8]
 
-        self.line1 = self.line1[8:] + l1
-        self.line2 = self.line2[8:] + l2
-        print(self.line1 + '.')
-        print(self.line2 + '.')
+        self.line1 += l1
+        self.line2 += l2
 
-        self.lcd.clear()
-        self.lcd.print(self.line1)
-        self.lcd.sec_line()
-        self.lcd.print(self.line2)
+        for i in range(8):
+            self.line1 = self.line1[1:]
+            self.line2 = self.line2[1:]
+
+            tmp_l1 = self.line1[:16]
+            tmp_l2 = self.line2[:16]
+
+            self.lcd.clear()
+            self.lcd.print(tmp_l1)
+            self.lcd.sec_line()
+            self.lcd.print(tmp_l2)
+
+            print(self.line1)
+            print(tmp_l1)
+            print(self.line2)
+            print(tmp_l2)
+            print()
+
+            sleep(.1)
 
 
 def main():

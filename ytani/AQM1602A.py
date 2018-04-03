@@ -99,8 +99,8 @@ class EightCharsColumns:
             self.line1 = self.line1[1:]
             self.line2 = self.line2[1:]
 
-            tmp_l1 = self.line1[:16]
-            tmp_l2 = self.line2[:16]
+            tmp_l1 = self.line1[:15]
+            tmp_l2 = self.line2[:15]
 
             self.lcd.clear()
             self.lcd.print(tmp_l1)
